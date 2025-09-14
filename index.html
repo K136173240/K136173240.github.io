@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur Tarif Assurance - Véhicules de Tourisme</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Calculateur Tarif Assurance</h1>
+                    <p>Véhicules de Tourisme - Maroc</p>
+                </div>
+                <button id="settings-btn" class="settings-btn" title="Paramètres des tarifs">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m17-4a4 4 0 0 1-8 0 4 4 0 0 1 8 0zM7 21a4 4 0 0 1-8 0 4 4 0 0 1 8 0z"></path>
+                    </svg>
+                    Paramètres
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="calculator-card">
+                <form id="insurance-form">
+                    <div class="form-group">
+                        <label for="vehicle-type">Type de véhicule:</label>
+                        <select id="vehicle-type" name="vehicleType" required>
+                            <option value="">Sélectionnez le type</option>
+                            <option value="Tourisme">Tourisme</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="engine-power">Puissance du moteur:</label>
+                        <select id="engine-power" name="enginePower" required>
+                            <option value="">Sélectionnez la puissance</option>
+                            <option value="jusqu'à 4 CV">Jusqu'à 4 CV</option>
+                            <option value="jusqu'à 6 CV">Jusqu'à 6 CV</option>
+                            <option value="5 CV">5 CV</option>
+                            <option value="6 CV">6 CV</option>
+                            <option value="7 CV">7 CV</option>
+                            <option value="8 CV">8 CV</option>
+                            <option value="9 CV">9 CV</option>
+                            <option value="10 CV">10 CV</option>
+                            <option value="8 CV Plus">8 CV Plus</option>
+                            <option value="11 CV Plus">11 CV Plus</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fuel-type">Type de carburant:</label>
+                        <select id="fuel-type" name="fuelType" required>
+                            <option value="">Sélectionnez le carburant</option>
+                            <option value="Essence">Essence</option>
+                            <option value="Diesel">Diesel</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="period">Période d'assurance:</label>
+                        <select id="period" name="period" required>
+                            <option value="">Sélectionnez la période</option>
+                            <option value="1">1 mois</option>
+                            <option value="3">3 mois</option>
+                            <option value="6">6 mois</option>
+                            <option value="12" selected>12 mois</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">Calculer le tarif</button>
+                </form>
+
+                <div id="result" class="result-section" style="display: none;">
+                    <h3>Détail du calcul des primes</h3>
+                    <div class="result-details">
+                        <div class="result-item">
+                            <span class="label">Type de véhicule:</span>
+                            <span id="result-vehicle-type" class="value"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Puissance:</span>
+                            <span id="result-engine-power" class="value"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Carburant:</span>
+                            <span id="result-fuel-type" class="value"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Période:</span>
+                            <span id="result-period" class="value"></span>
+                        </div>
+                        
+                        <div class="premium-breakdown">
+                            <h4>Détail des primes</h4>
+                            <div class="result-item">
+                                <span class="label">Prime RC:</span>
+                                <span id="result-prime-rc" class="value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Prime CAT (RC × 3,5%):</span>
+                                <span id="result-prime-cat" class="value"></span>
+                            </div>
+                            <div class="result-item subtotal">
+                                <span class="label">Prime Nette (RC + CAT):</span>
+                                <span id="result-prime-nette" class="value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Taxe (Prime Nette × 15,45%):</span>
+                                <span id="result-taxe" class="value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Taxe Parafiscale (Prime Nette × 1%):</span>
+                                <span id="result-taxe-parafiscale" class="value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Accessoires:</span>
+                                <span id="result-accessoires" class="value"></span>
+                            </div>
+                            <div class="result-item total">
+                                <span class="label">Prime TTC:</span>
+                                <span id="result-prime-ttc" class="value price"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="error" class="error-section" style="display: none;">
+                    <p>Aucun tarif trouvé pour cette combinaison. Veuillez vérifier vos sélections.</p>
+                </div>
+            </div>
+
+            <div class="tariff-table">
+                <h3>Tableau des tarifs</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Puissance</th>
+                            <th>Carburant</th>
+                            <th>Tarif (MAD)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tariff-tbody">
+                        <!-- Tariffs will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Paramètres des Tarifs</h2>
+                    <button id="close-modal" class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Paramètres des Taux</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="cat-rate">Taux CAT (%):</label>
+                                <input type="number" id="cat-rate" step="0.01" min="0" max="100" value="3.5">
+                                <span class="setting-description">Prime CAT = Prime RC × Taux CAT</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="tax-rate">Taux Taxe (%):</label>
+                                <input type="number" id="tax-rate" step="0.01" min="0" max="100" value="15.45">
+                                <span class="setting-description">Taxe = Prime Nette × Taux Taxe</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="parafiscal-rate">Taux Taxe Parafiscale (%):</label>
+                                <input type="number" id="parafiscal-rate" step="0.01" min="0" max="100" value="1.0">
+                                <span class="setting-description">Taxe Parafiscale = Prime Nette × Taux Parafiscale</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="accessories-amount">Montant Accessoires (MAD):</label>
+                                <input type="number" id="accessories-amount" step="0.01" min="0" value="17.00">
+                                <span class="setting-description">Montant fixe ajouté au calcul final</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Taux par Période</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="period-1-rate">Taux 1 mois (%):</label>
+                                <input type="number" id="period-1-rate" step="0.01" min="0" max="100" value="15.0">
+                                <span class="setting-description">Prime RC × Taux pour 1 mois</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="period-3-rate">Taux 3 mois (%):</label>
+                                <input type="number" id="period-3-rate" step="0.01" min="0" max="100" value="26.0">
+                                <span class="setting-description">Prime RC × Taux pour 3 mois</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="period-6-rate">Taux 6 mois (%):</label>
+                                <input type="number" id="period-6-rate" step="0.01" min="0" max="100" value="26.0">
+                                <span class="setting-description">Prime RC × Taux pour 6 mois</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="period-12-rate">Taux 12 mois (%):</label>
+                                <input type="number" id="period-12-rate" step="0.01" min="0" max="100" value="100.0">
+                                <span class="setting-description">Prime RC × Taux pour 12 mois (base)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Tarifs de Base (Prime RC)</h3>
+                        
+                        <!-- Add new tariff form -->
+                        <div class="add-tariff-form">
+                            <h4>Ajouter un nouveau tarif</h4>
+                            <div class="add-tariff-grid">
+                                <input type="text" id="new-vehicle-type" placeholder="Type de véhicule" value="Tourisme">
+                                <input type="text" id="new-engine-power" placeholder="Puissance (ex: 8 CV)">
+                                <select id="new-fuel-type">
+                                    <option value="Essence">Essence</option>
+                                    <option value="Diesel">Diesel</option>
+                                </select>
+                                <input type="number" id="new-price" placeholder="Prime RC (MAD)" step="0.01" min="0">
+                                <button id="add-tariff-btn" class="btn-add">Ajouter</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tariff-list">
+                            <div class="tariff-header">
+                                <span>Type</span>
+                                <span>Puissance</span>
+                                <span>Carburant</span>
+                                <span>Prime RC (MAD)</span>
+                                <span>Actions</span>
+                            </div>
+                            <div id="editable-tariffs">
+                                <!-- Tariffs will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button id="reset-settings" class="btn-secondary">Réinitialiser</button>
+                    <button id="save-settings" class="btn-primary">Sauvegarder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
